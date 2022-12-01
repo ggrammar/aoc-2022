@@ -1,7 +1,4 @@
-elf = 0
-biggest_elf = 0
-baddest_elf = 0
-biggest_baddest_elf = 0
+elf = biggest_elf = baddest_elf = biggest_baddest_elf = 0
 
 with open('./input.txt', 'r') as f:
 	for line in f.readlines():
@@ -23,5 +20,4 @@ with open('./input.txt', 'r') as f:
 		else:
 			elf += int(line)
 
-print(biggest_baddest_elf)
-print(biggest_elf + baddest_elf + biggest_baddest_elf)
+print("{}, {}".format(biggest_baddest_elf, biggest_elf + baddest_elf + biggest_baddest_elf))
