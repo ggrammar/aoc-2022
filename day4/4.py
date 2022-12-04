@@ -1,23 +1,16 @@
 import re
 
-def input_to_two_ranges(input):
-	a, b, c, d = map(int, re.split(',|-', input))
-	return range(a, b + 1), range(c, d + 1)
+input = map(
+	lambda line : map(int, re.split(',|-', line)), 
+	open("./input.txt")
+)
 
-with open("./input.txt", "r") as f:
-	ranges = map(input_to_two_ranges, f.readlines())
+def contains(a):
+	return (a[0] >= a[2] and a[1] <= a[3]) or (a[0] <= a[2] and a[1] >= a[3])
 
+def overlaps(a):
+	return any(set(range(a[0], a[1] + 1)).intersection(range(a[2], a[3] + 1)))
 
-def contains(first, second):
-	return first[0] >= second[0] and first[-1] <= second[-1]
-
-def bidirectional_contains_on_two_ranges(ranges):
-	return contains(ranges[0], ranges[1]) or contains(ranges[1], ranges[0])
-
-def overlaps_on_two_ranges(ranges):
-	# only set has the 'intersection' method, but it accepts any iterable as an argument.
-	return any(set(ranges[0]).intersection(ranges[1]))
-
-print("Part 1 :: {}".format(sum(map(bidirectional_contains_on_two_ranges, ranges))))
-print("Part 2 :: {}".format(sum(map(overlaps_on_two_ranges, ranges))))
+print(sum(map(contains, input)))
+print(sum(map(overlaps, input)))
 
