@@ -1,51 +1,31 @@
-def input_to_range(input):
-	first, second = input.split("-")
-	return range(int(first), int(second) + 1)
+import re
 
+def input_to_two_ranges(input):
+	a, b, c, d = re.split(',|-', input)
+	return range(int(a), int(b) + 1), range(int(c), int(d) + 1)
 
-def contains(first, second):
-	if len(first) == 1:
-		if first in second:
-			return True
+def directional_contains(first, second):
+	if (len(first) == 1) and (first in second):
+		return True
 
 	if first[0] >= second[0]:
 		if first[-1] <= second[-1]:
 			return True
 
-	return False
+def bidirectional_contains_on_two_ranges(ranges):
+	if directional_contains(ranges[0], ranges[1]) or directional_contains(ranges[1], ranges[0]):
+		return 1
+	return 0
 
-
-def overlaps(first, second):
-	for i in first:
-		if i in second:
-			return True
-	
-
-contains_total = 0
-overlaps_total = 0
+def overlaps_on_two_ranges(ranges):
+	for i in ranges[0]:
+		if i in ranges[1]:
+			return 1
+	return 0
 
 with open("./input.txt", "r") as f:
-	for line in f.readlines():
-		print(line)
+	ranges = map(input_to_two_ranges, f.readlines())
 
-		# first and second are a range of one or more consecutive integers
-		first = input_to_range(line.split(",")[0])
-		second = input_to_range(line.split(",")[1])
-
-		print(first)
-		print(second)
-
-		if (
-			contains(first, second)
-			or contains(second, first)
-		):
-			contains_total += 1
-
-		if (
-			overlaps(first, second)
-			or overlaps(second, first)
-		):
-			overlaps_total += 1
-
-print("{}, {}".format(contains_total, overlaps_total))
+print("Part 1 :: {}".format(sum(map(bidirectional_contains_on_two_ranges, ranges))))
+print("Part 2 :: {}".format(sum(map(overlaps_on_two_ranges, ranges))))
 
